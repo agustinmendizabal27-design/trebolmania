@@ -6,18 +6,9 @@
 <title>TrebolMania - Probá tu Suerte</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #0a0a0a;
-    color: #fff;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ─── LANDING ─── */
   #landing {
     min-height: 100vh;
     display: flex;
@@ -25,12 +16,11 @@
     align-items: center;
     justify-content: flex-end;
     position: relative;
-    padding-bottom: 40px;
+    padding-bottom: 0;
   }
 
   .bg-image {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background-image: url('Verificación_de_página.png');
     background-size: cover;
     background-position: center top;
@@ -38,38 +28,33 @@
   }
 
   .bg-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.85) 100%);
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.7) 75%, rgba(0,0,0,0.7) 100%);
     z-index: 1;
   }
 
   .landing-content {
-    position: relative;
+    position: absolute;
     z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     width: 100%;
     max-width: 480px;
     padding: 0 20px;
+    bottom: 13%;
   }
 
   .pulse-ring {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     border-radius: 50px;
     background: rgba(37,211,102,0.3);
     animation: pulse 1.8s ease-out infinite;
     z-index: -1;
   }
-
-  @keyframes pulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.18); opacity: 0; }
-  }
+  @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.18); opacity: 0; } }
 
   .whatsapp-btn {
     position: relative;
@@ -94,362 +79,30 @@
     transition: transform 0.15s, box-shadow 0.15s;
     animation: bounceBtn 2s ease-in-out infinite;
   }
-
-  @keyframes bounceBtn {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-  }
-
-  .whatsapp-btn:hover {
-    box-shadow: 0 0 50px rgba(37,211,102,0.9), 0 4px 20px rgba(0,0,0,0.4);
-    animation: none;
-    transform: scale(1.04);
-  }
-
+  @keyframes bounceBtn { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .whatsapp-btn:hover { box-shadow: 0 0 50px rgba(37,211,102,0.9), 0 4px 20px rgba(0,0,0,0.4); animation: none; transform: scale(1.04); }
   .whatsapp-btn svg { width: 30px; height: 30px; flex-shrink: 0; }
 
   .status-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 8px;
     background: rgba(0,0,0,0.5);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 20px;
     padding: 6px 16px;
-    font-size: 0.78rem;
-    color: #ccc;
+    font-size: 0.78rem; color: #ccc;
   }
-
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #25D366;
-    animation: blink 1.5s ease-in-out infinite;
-  }
-
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #25D366; animation: blink 1.5s ease-in-out infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* ─── TOAST ─── */
-  #toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 14px 24px;
-    font-size: 0.9rem;
-    color: #fff;
-    z-index: 9999;
-    transition: transform 0.3s ease;
-    white-space: nowrap;
-  }
-  #toast.show { transform: translateX(-50%) translateY(0); }
-
-  /* ─── ADMIN PANEL ─── */
-  #admin-panel {
-    display: none;
-    min-height: 100vh;
-    background: #111;
-    padding: 20px;
-  }
-
-  .admin-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #333;
-  }
-
-  .admin-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.5rem;
-    color: #25D366;
-  }
-
-  .btn-back {
-    background: #222;
-    border: 1px solid #444;
-    color: #ccc;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: background 0.2s;
-  }
-  .btn-back:hover { background: #333; }
-
-  .section-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  /* Config Firebase */
-  .config-card {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 24px;
-  }
-
-  .config-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-
-  @media(max-width:500px){ .config-grid { grid-template-columns: 1fr; } }
-
-  .input-group label {
-    display: block;
-    font-size: 0.72rem;
-    color: #888;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .input-group input, .input-group select {
-    width: 100%;
-    background: #0f0f0f;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: #fff;
-    padding: 9px 12px;
-    font-size: 0.85rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .input-group input:focus { border-color: #25D366; }
-
-  .btn-primary {
-    background: linear-gradient(135deg, #25D366, #128C7E);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: opacity 0.2s;
-    width: 100%;
-  }
-  .btn-primary:hover { opacity: 0.85; }
-
-  .btn-secondary {
-    background: #222;
-    color: #ccc;
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.2s;
-  }
-  .btn-secondary:hover { background: #333; }
-
-  /* Números list */
-  .numbers-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 16px;
-    max-height: 320px;
-    overflow-y: auto;
-  }
-
-  .number-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 10px;
-    padding: 12px 14px;
-  }
-
-  .number-item.restricted {
-    border-color: #ff4444;
-    opacity: 0.6;
-  }
-
-  .number-info { flex: 1; }
-  .number-name { font-weight: 600; font-size: 0.9rem; }
-  .number-phone { font-size: 0.78rem; color: #888; }
-
-  .badge {
-    font-size: 0.65rem;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-  .badge-active { background: rgba(37,211,102,0.15); color: #25D366; border: 1px solid #25D366; }
-  .badge-restricted { background: rgba(255,68,68,0.15); color: #ff4444; border: 1px solid #ff4444; }
-
-  .btn-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 6px;
-    transition: background 0.2s;
-    font-size: 1rem;
-  }
-  .btn-icon:hover { background: #333; }
-
-  /* Add form */
-  .add-form {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 24px;
-  }
-
-  .add-form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  @media(max-width:500px){ .add-form-grid { grid-template-columns: 1fr; } }
-
-  /* Stats */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .stat-card {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 10px;
-    padding: 14px;
-    text-align: center;
-  }
-
-  .stat-value {
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.8rem;
-    color: #25D366;
-  }
-
-  .stat-label { font-size: 0.72rem; color: #888; }
-
-  /* Kommo config */
-  .kommo-badge {
-    display: inline-block;
-    background: rgba(255,165,0,0.15);
-    color: orange;
-    border: 1px solid orange;
-    border-radius: 20px;
-    padding: 2px 10px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    margin-left: 8px;
-  }
-
-  /* Leads table */
-  .leads-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-  }
-  .leads-table th {
-    background: #1a1a1a;
-    padding: 10px 12px;
-    text-align: left;
-    color: #888;
-    font-weight: 600;
-    border-bottom: 1px solid #333;
-  }
-  .leads-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #1a1a1a;
-    color: #ccc;
-  }
-  .leads-table tr:hover td { background: #1a1a1a; }
-
-  .empty-state {
-    text-align: center;
-    padding: 32px;
-    color: #555;
-    font-size: 0.9rem;
-  }
-
-  .spinner {
-    display: inline-block;
-    width: 16px; height: 16px;
-    border: 2px solid #333;
-    border-top-color: #25D366;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-  }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #333; border-top-color: #25D366; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Admin trigger */
-  #admin-trigger {
-    position: fixed;
-    bottom: 12px;
-    right: 12px;
-    background: rgba(0,0,0,0.6);
-    border: 1px solid #333;
-    border-radius: 50%;
-    width: 36px; height: 36px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    z-index: 100;
-    font-size: 1rem;
-    transition: background 0.2s;
-  }
-  #admin-trigger:hover { background: rgba(0,0,0,0.9); }
-
-  /* Admin password modal */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal-box {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 16px;
-    padding: 28px;
-    width: 90%;
-    max-width: 340px;
-  }
-  .modal-title { font-weight: 700; margin-bottom: 16px; font-size: 1rem; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #111; }
-  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 14px 24px; font-size: 0.9rem; color: #fff; z-index: 9999; transition: transform 0.3s ease; white-space: nowrap; }
+  #toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- ─── LANDING ─── -->
 <div id="landing">
   <div class="bg-image"></div>
   <div class="bg-overlay"></div>
@@ -468,243 +121,46 @@
   </div>
 </div>
 
-<!-- Admin trigger -->
-<div id="admin-trigger" onclick="showAdminModal()">⚙️</div>
-
-<!-- Admin password modal -->
-<div class="modal-overlay" id="admin-modal">
-  <div class="modal-box">
-    <div class="modal-title">🔐 Acceso al Panel</div>
-    <div class="input-group" style="margin-bottom:12px">
-      <label>Contraseña</label>
-      <input type="password" id="admin-pass-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdminPass()">
-    </div>
-    <div id="pass-error" style="color:#ff4444;font-size:0.8rem;margin-bottom:10px;display:none">Contraseña incorrecta</div>
-    <div style="display:flex;gap:10px">
-      <button class="btn-primary" onclick="checkAdminPass()">Entrar</button>
-      <button class="btn-secondary" onclick="closeAdminModal()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─── ADMIN PANEL ─── -->
-<div id="admin-panel">
-  <div class="admin-header">
-    <div class="admin-title">⚙️ Panel Admin — TrebolMania</div>
-    <button class="btn-back" onclick="showLanding()">← Volver</button>
-  </div>
-
-  <!-- Stats -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-value" id="stat-total">—</div>
-      <div class="stat-label">Números activos</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="stat-restricted">—</div>
-      <div class="stat-label">Restringidos</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="stat-leads">—</div>
-      <div class="stat-label">Leads hoy</div>
-    </div>
-  </div>
-
-  <!-- Firebase Config -->
-  <div class="config-card">
-    <div class="section-title">🔥 Configuración Firebase</div>
-    <div class="config-grid">
-      <div class="input-group"><label>API Key</label><input id="fb-apiKey" value="AIzaSyCuwSu4gWkuPnO5zCdhDnAOX8hwdtUmMOw"></div>
-      <div class="input-group"><label>Auth Domain</label><input id="fb-authDomain" value="trebolmania-2ee95.firebaseapp.com"></div>
-      <div class="input-group"><label>Project ID</label><input id="fb-projectId" value="trebolmania-2ee95"></div>
-      <div class="input-group"><label>Storage Bucket</label><input id="fb-storageBucket" value="trebolmania-2ee95.firebasestorage.app"></div>
-      <div class="input-group"><label>Messaging Sender ID</label><input id="fb-messagingSenderId" value="1079661627624"></div>
-      <div class="input-group"><label>App ID</label><input id="fb-appId" value="1:1079661627624:web:b891dbc6adf1d58d36a15d"></div>
-    </div>
-    <button class="btn-primary" onclick="saveFirebaseConfig()">💾 Guardar y conectar Firebase</button>
-    <div id="fb-status" style="margin-top:10px;font-size:0.82rem;color:#888"></div>
-  </div>
-
-  <!-- Pixel + CAPI Config -->
-  <div class="config-card">
-    <div class="section-title">📊 Píxel de Meta + API de Conversiones</div>
-    <div class="config-grid">
-      <div class="input-group"><label>ID del Píxel</label><input id="meta-pixel-id" placeholder="864634119541424"></div>
-      <div class="input-group"><label>Access Token CAPI</label><input id="meta-capi-token" placeholder="EAABxx..."></div>
-    </div>
-    <button class="btn-primary" onclick="saveMetaConfig()">💾 Guardar configuración Meta</button>
-    <div id="meta-status" style="margin-top:10px;font-size:0.82rem;color:#888"></div>
-  </div>
-
-  <!-- Kommo Config -->
-  <div class="config-card">
-    <div class="section-title">🔗 Kommo CRM <span class="kommo-badge">Próximamente</span></div>
-    <div class="config-grid">
-      <div class="input-group"><label>Subdominio</label><input id="kommo-domain" placeholder="tuempresa.kommo.com" disabled></div>
-      <div class="input-group"><label>Access Token</label><input id="kommo-token" placeholder="Próximamente" disabled></div>
-    </div>
-    <button class="btn-primary" style="opacity:0.4;cursor:not-allowed" disabled>🔒 Configurar mañana</button>
-  </div>
-
-  <!-- Números de WhatsApp -->
-  <div class="config-card">
-    <div class="section-title">📱 Números de WhatsApp</div>
-
-    <!-- Add form -->
-    <div class="add-form">
-      <div class="section-title" style="font-size:0.85rem;color:#aaa">➕ Agregar número</div>
-      <div class="add-form-grid">
-        <div class="input-group"><label>Nombre / Etiqueta</label><input id="new-name" placeholder="Ej: Agente 1"></div>
-        <div class="input-group"><label>Número (con código país)</label><input id="new-phone" placeholder="5491112345678"></div>
-      </div>
-      <div class="input-group" style="margin-bottom:10px">
-        <label>Mensaje predeterminado</label>
-        <input id="new-message" placeholder="Hola! Quiero saber más sobre TrebolMania 🍀">
-      </div>
-      <button class="btn-primary" onclick="addNumber()">Agregar número</button>
-    </div>
-
-    <!-- List -->
-    <div id="numbers-list" class="numbers-list">
-      <div class="empty-state"><span class="spinner"></span> Cargando...</div>
-    </div>
-  </div>
-
-  <!-- Leads -->
-  <div class="config-card">
-    <div class="section-title">📋 Leads recientes</div>
-    <div id="leads-container">
-      <div class="empty-state">Conectá Firebase para ver los leads</div>
-    </div>
-  </div>
-
-</div>
-
-<!-- Edit modal -->
-<div class="modal-overlay" id="edit-modal">
-  <div class="modal-box">
-    <div class="modal-title">✏️ Editar número</div>
-    <input type="hidden" id="edit-id">
-    <div class="input-group" style="margin-bottom:10px">
-      <label>Nombre / Etiqueta</label>
-      <input id="edit-name" placeholder="Agente 1">
-    </div>
-    <div class="input-group" style="margin-bottom:10px">
-      <label>Número</label>
-      <input id="edit-phone" placeholder="5491112345678">
-    </div>
-    <div class="input-group" style="margin-bottom:10px">
-      <label>Mensaje</label>
-      <input id="edit-message">
-    </div>
-    <div class="input-group" style="margin-bottom:16px">
-      <label>Estado</label>
-      <select id="edit-status">
-        <option value="active">✅ Activo</option>
-        <option value="restricted">❌ Restringido</option>
-      </select>
-    </div>
-    <div style="display:flex;gap:10px">
-      <button class="btn-primary" onclick="saveEdit()">Guardar</button>
-      <button class="btn-secondary" onclick="closeEditModal()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Toast -->
 <div id="toast"></div>
 
-<!-- Firebase SDK -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, limit, where, Timestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import { getFirestore, collection, getDocs, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-  // ─── STATE ───
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyCuwSu4gWkuPnO5zCdhDnAOX8hwdtUmMOw",
+    authDomain: "trebolmania-2ee95.firebaseapp.com",
+    projectId: "trebolmania-2ee95",
+    storageBucket: "trebolmania-2ee95.firebasestorage.app",
+    messagingSenderId: "1079661627624",
+    appId: "1:1079661627624:web:b891dbc6adf1d58d36a15d"
+  };
+
   window._fb = { app: null, db: null, connected: false };
   window._numbers = [];
   window._currentIndex = 0;
-  window._metaConfig = { pixelId: '', token: '' };
-  const ADMIN_PASSWORD = 'trebol2025';
+  window._metaConfig = JSON.parse(localStorage.getItem('meta_config') || '{}');
 
-  // ─── LOAD LOCAL CONFIG ───
-  function loadLocalConfig() {
+  // Conectar Firebase
+  async function init() {
     try {
-      const fbConf = JSON.parse(localStorage.getItem('fb_config') || 'null');
-      if (fbConf) {
-        document.getElementById('fb-apiKey').value = fbConf.apiKey || '';
-        document.getElementById('fb-authDomain').value = fbConf.authDomain || '';
-        document.getElementById('fb-projectId').value = fbConf.projectId || '';
-        document.getElementById('fb-storageBucket').value = fbConf.storageBucket || '';
-        document.getElementById('fb-messagingSenderId').value = fbConf.messagingSenderId || '';
-        document.getElementById('fb-appId').value = fbConf.appId || '';
-      }
-      const metaConf = JSON.parse(localStorage.getItem('meta_config') || 'null');
-      if (metaConf) {
-        document.getElementById('meta-pixel-id').value = metaConf.pixelId || '';
-        document.getElementById('meta-capi-token').value = metaConf.token || '';
-        window._metaConfig = metaConf;
-        injectPixel(metaConf.pixelId);
-      }
-    } catch(e) {}
-  }
-
-  // ─── FIREBASE ───
-  window.saveFirebaseConfig = async function() {
-    const config = {
-      apiKey: document.getElementById('fb-apiKey').value.trim(),
-      authDomain: document.getElementById('fb-authDomain').value.trim(),
-      projectId: document.getElementById('fb-projectId').value.trim(),
-      storageBucket: document.getElementById('fb-storageBucket').value.trim(),
-      messagingSenderId: document.getElementById('fb-messagingSenderId').value.trim(),
-      appId: document.getElementById('fb-appId').value.trim(),
-    };
-    if (!config.apiKey || !config.projectId) {
-      showToast('⚠️ Completá al menos API Key y Project ID');
-      return;
-    }
-    localStorage.setItem('fb_config', JSON.stringify(config));
-    await connectFirebase(config);
-  };
-
-  async function connectFirebase(config) {
-    const status = document.getElementById('fb-status');
-    status.innerHTML = '<span class="spinner"></span> Conectando...';
-    try {
-      if (window._fb.app) {
-        // Already initialized, just get db
-      } else {
-        window._fb.app = initializeApp(config);
-      }
+      window._fb.app = initializeApp(FIREBASE_CONFIG);
       window._fb.db = getFirestore(window._fb.app);
       window._fb.connected = true;
-      status.innerHTML = '✅ Firebase conectado correctamente';
-      status.style.color = '#25D366';
-      showToast('✅ Firebase conectado');
-      await loadNumbers();
-      await loadLeads();
-    } catch(e) {
-      status.innerHTML = '❌ Error: ' + e.message;
-      status.style.color = '#ff4444';
-      showToast('❌ Error conectando Firebase');
-      // Use local fallback
-      loadNumbersLocal();
-    }
+      await refreshNumbers();
+    } catch(e) { console.warn('Firebase error:', e); }
+
+    // Inyectar píxel si está configurado
+    if (window._metaConfig?.pixelId) injectPixel(window._metaConfig.pixelId);
   }
 
-  // ─── META PIXEL + CAPI ───
-  window.saveMetaConfig = function() {
-    const conf = {
-      pixelId: document.getElementById('meta-pixel-id').value.trim(),
-      token: document.getElementById('meta-capi-token').value.trim(),
-    };
-    if (!conf.pixelId) { showToast('⚠️ Ingresá el ID del Píxel'); return; }
-    localStorage.setItem('meta_config', JSON.stringify(conf));
-    window._metaConfig = conf;
-    injectPixel(conf.pixelId);
-    document.getElementById('meta-status').innerHTML = '✅ Píxel configurado: ' + conf.pixelId;
-    document.getElementById('meta-status').style.color = '#25D366';
-    showToast('✅ Píxel de Meta guardado');
-  };
+  async function refreshNumbers() {
+    if (!window._fb.connected) return;
+    try {
+      const snap = await getDocs(collection(window._fb.db, 'whatsapp_numbers'));
+      window._numbers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch(e) {}
+  }
 
   function injectPixel(pixelId) {
     if (!pixelId || document.getElementById('fb-pixel-script')) return;
@@ -713,314 +169,71 @@
     fbq('track', 'PageView');
   }
 
-  async function sendCAPIEvent(eventName, userData) {
+  async function sendCAPIEvent(eventName) {
     const conf = window._metaConfig;
-    if (!conf.pixelId || !conf.token) return;
+    if (!conf?.pixelId || !conf?.token) return;
     try {
-      const payload = {
-        data: [{
-          event_name: eventName,
-          event_time: Math.floor(Date.now() / 1000),
-          action_source: 'website',
-          event_source_url: window.location.href,
-          user_data: {
-            client_ip_address: '',
-            client_user_agent: navigator.userAgent,
-            ...userData
-          }
-        }]
-      };
       await fetch(`https://graph.facebook.com/v19.0/${conf.pixelId}/events?access_token=${conf.token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ data: [{ event_name: eventName, event_time: Math.floor(Date.now()/1000), action_source: 'website', event_source_url: window.location.href, user_data: { client_user_agent: navigator.userAgent } }] })
       });
-    } catch(e) { console.warn('CAPI error:', e); }
+    } catch(e) {}
   }
 
-  // ─── NUMBERS ───
-  async function loadNumbers() {
-    if (!window._fb.connected) { loadNumbersLocal(); return; }
-    try {
-      const snap = await getDocs(collection(window._fb.db, 'whatsapp_numbers'));
-      window._numbers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderNumbers();
-      updateStats();
-    } catch(e) {
-      loadNumbersLocal();
-    }
-  }
-
-  function loadNumbersLocal() {
-    try {
-      window._numbers = JSON.parse(localStorage.getItem('wsp_numbers') || '[]');
-    } catch(e) { window._numbers = []; }
-    renderNumbers();
-    updateStats();
-  }
-
-  function saveNumbersLocal() {
-    localStorage.setItem('wsp_numbers', JSON.stringify(window._numbers));
-  }
-
-  window.addNumber = async function() {
-    const name = document.getElementById('new-name').value.trim();
-    const phone = document.getElementById('new-phone').value.trim().replace(/\D/g,'');
-    const message = document.getElementById('new-message').value.trim() || 'Hola! Quiero saber más sobre TrebolMania 🍀';
-    if (!name || !phone) { showToast('⚠️ Completá nombre y número'); return; }
-
-    const num = { name, phone, message, status: 'active', createdAt: Date.now() };
-
-    if (window._fb.connected) {
-      try {
-        const docRef = await addDoc(collection(window._fb.db, 'whatsapp_numbers'), num);
-        num.id = docRef.id;
-        window._numbers.push(num);
-      } catch(e) {
-        num.id = 'local_' + Date.now();
-        window._numbers.push(num);
-        saveNumbersLocal();
-      }
-    } else {
-      num.id = 'local_' + Date.now();
-      window._numbers.push(num);
-      saveNumbersLocal();
-    }
-
-    document.getElementById('new-name').value = '';
-    document.getElementById('new-phone').value = '';
-    document.getElementById('new-message').value = '';
-    renderNumbers();
-    updateStats();
-    showToast('✅ Número agregado');
-  };
-
-  window.openEditModal = function(id) {
-    const num = window._numbers.find(n => n.id === id);
-    if (!num) return;
-    document.getElementById('edit-id').value = id;
-    document.getElementById('edit-name').value = num.name;
-    document.getElementById('edit-phone').value = num.phone;
-    document.getElementById('edit-message').value = num.message || '';
-    document.getElementById('edit-status').value = num.status || 'active';
-    document.getElementById('edit-modal').classList.add('active');
-  };
-
-  window.closeEditModal = function() {
-    document.getElementById('edit-modal').classList.remove('active');
-  };
-
-  window.saveEdit = async function() {
-    const id = document.getElementById('edit-id').value;
-    const updates = {
-      name: document.getElementById('edit-name').value.trim(),
-      phone: document.getElementById('edit-phone').value.trim().replace(/\D/g,''),
-      message: document.getElementById('edit-message').value.trim(),
-      status: document.getElementById('edit-status').value,
-    };
-    if (!updates.name || !updates.phone) { showToast('⚠️ Completá los campos'); return; }
-
-    const idx = window._numbers.findIndex(n => n.id === id);
-    if (idx === -1) return;
-    window._numbers[idx] = { ...window._numbers[idx], ...updates };
-
-    if (window._fb.connected && !id.startsWith('local_')) {
-      try { await updateDoc(doc(window._fb.db, 'whatsapp_numbers', id), updates); } catch(e) {}
-    }
-    saveNumbersLocal();
-    renderNumbers();
-    updateStats();
-    closeEditModal();
-    showToast('✅ Número actualizado');
-  };
-
-  window.deleteNumber = async function(id) {
-    if (!confirm('¿Eliminar este número?')) return;
-    window._numbers = window._numbers.filter(n => n.id !== id);
-    if (window._fb.connected && !id.startsWith('local_')) {
-      try { await deleteDoc(doc(window._fb.db, 'whatsapp_numbers', id)); } catch(e) {}
-    }
-    saveNumbersLocal();
-    renderNumbers();
-    updateStats();
-    showToast('🗑️ Número eliminado');
-  };
-
-  function renderNumbers() {
-    const list = document.getElementById('numbers-list');
-    if (!window._numbers.length) {
-      list.innerHTML = '<div class="empty-state">No hay números. Agregá el primero ↑</div>';
-      return;
-    }
-    list.innerHTML = window._numbers.map(n => `
-      <div class="number-item ${n.status === 'restricted' ? 'restricted' : ''}">
-        <div class="number-info">
-          <div class="number-name">${n.name}</div>
-          <div class="number-phone">+${n.phone}</div>
-        </div>
-        <span class="badge ${n.status === 'restricted' ? 'badge-restricted' : 'badge-active'}">
-          ${n.status === 'restricted' ? 'Restringido' : 'Activo'}
-        </span>
-        <button class="btn-icon" onclick="openEditModal('${n.id}')" title="Editar">✏️</button>
-        <button class="btn-icon" onclick="deleteNumber('${n.id}')" title="Eliminar">🗑️</button>
-      </div>
-    `).join('');
-  }
-
-  function updateStats() {
-    const active = window._numbers.filter(n => n.status !== 'restricted').length;
-    const restricted = window._numbers.filter(n => n.status === 'restricted').length;
-    document.getElementById('stat-total').textContent = active;
-    document.getElementById('stat-restricted').textContent = restricted;
-  }
-
-  // ─── LEADS ───
-  async function loadLeads() {
-    if (!window._fb.connected) return;
-    try {
-      const today = new Date(); today.setHours(0,0,0,0);
-      const snap = await getDocs(
-        query(collection(window._fb.db, 'leads'), orderBy('timestamp', 'desc'), limit(50))
-      );
-      const leads = snap.docs.map(d => d.data());
-      const todayLeads = leads.filter(l => l.timestamp > today.getTime());
-      document.getElementById('stat-leads').textContent = todayLeads.length;
-      renderLeads(leads);
-    } catch(e) {
-      document.getElementById('stat-leads').textContent = '—';
-    }
-  }
-
-  function renderLeads(leads) {
-    const container = document.getElementById('leads-container');
-    if (!leads.length) {
-      container.innerHTML = '<div class="empty-state">Aún no hay leads registrados</div>';
-      return;
-    }
-    container.innerHTML = `
-      <table class="leads-table">
-        <thead><tr>
-          <th>Fecha</th><th>Número usado</th><th>IP aprox.</th>
-        </tr></thead>
-        <tbody>
-          ${leads.slice(0,20).map(l => `<tr>
-            <td>${new Date(l.timestamp).toLocaleString('es-AR')}</td>
-            <td>+${l.phone || '—'}</td>
-            <td>${l.userAgent ? l.userAgent.slice(0,30)+'...' : '—'}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    `;
-  }
-
-  // ─── WHATSAPP ROTATION ───
   window.handleWhatsAppClick = async function(e) {
     e.preventDefault();
+    const btn = document.getElementById('whatsapp-btn');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner"></span> Verificando...';
+    btn.style.pointerEvents = 'none';
 
-    const actives = window._numbers.filter(n => n.status !== 'restricted');
-    if (!actives.length) {
-      // Fallback: abre sin número configurado
-      showToast('⚠️ No hay números activos configurados');
-      return;
-    }
+    try {
+      // Refrescar desde Firebase en tiempo real
+      await refreshNumbers();
 
-    // Rotación circular
-    if (window._currentIndex >= actives.length) window._currentIndex = 0;
-    const chosen = actives[window._currentIndex];
-    window._currentIndex++;
+      const actives = window._numbers.filter(n => n.status !== 'restricted');
+      if (!actives.length) {
+        showToast('⚠️ No hay agentes disponibles ahora. Intentá en unos minutos.');
+        return;
+      }
 
-    const msg = encodeURIComponent(chosen.message || 'Hola! Quiero saber más sobre TrebolMania 🍀');
-    const url = `https://wa.me/${chosen.phone}?text=${msg}`;
+      if (window._currentIndex >= actives.length) window._currentIndex = 0;
+      const chosen = actives[window._currentIndex++];
+      const msg = encodeURIComponent(chosen.message || 'Hola! Quiero saber más sobre TrebolMania 🍀');
 
-    // Registrar lead en Firebase
-    const lead = {
-      phone: chosen.phone,
-      agentName: chosen.name,
-      timestamp: Date.now(),
-      userAgent: navigator.userAgent,
-    };
+      // Guardar lead
+      if (window._fb.connected) {
+        try {
+          await addDoc(collection(window._fb.db, 'leads'), {
+            phone: chosen.phone,
+            agentName: chosen.name,
+            timestamp: Date.now(),
+            userAgent: navigator.userAgent,
+          });
+        } catch(e) {}
+      }
 
-    if (window._fb.connected) {
-      try { await addDoc(collection(window._fb.db, 'leads'), lead); } catch(e) {}
-    }
+      // Píxel + CAPI
+      if (typeof fbq !== 'undefined') fbq('track', 'Lead');
+      await sendCAPIEvent('Lead');
 
-    // Disparar Píxel Meta
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'Lead');
-    }
+      window.open(`https://wa.me/${chosen.phone}?text=${msg}`, '_blank');
 
-    // Disparar CAPI
-    await sendCAPIEvent('Lead', { client_user_agent: navigator.userAgent });
-
-    window.open(url, '_blank');
-  };
-
-  // ─── ADMIN AUTH ───
-  window.showAdminModal = function() {
-    document.getElementById('admin-modal').classList.add('active');
-    document.getElementById('admin-pass-input').value = '';
-    document.getElementById('pass-error').style.display = 'none';
-    setTimeout(() => document.getElementById('admin-pass-input').focus(), 100);
-  };
-
-  window.closeAdminModal = function() {
-    document.getElementById('admin-modal').classList.remove('active');
-  };
-
-  window.checkAdminPass = function() {
-    const val = document.getElementById('admin-pass-input').value;
-    if (val === ADMIN_PASSWORD) {
-      closeAdminModal();
-      showAdmin();
-    } else {
-      document.getElementById('pass-error').style.display = 'block';
+    } finally {
+      btn.innerHTML = originalHTML;
+      btn.style.pointerEvents = 'auto';
     }
   };
 
-  function showAdmin() {
-    document.getElementById('landing').style.display = 'none';
-    document.getElementById('admin-trigger').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    loadLocalConfig();
-    loadNumbersLocal();
-    // Auto-connect if config exists
-    const fbConf = JSON.parse(localStorage.getItem('fb_config') || 'null');
-    if (fbConf && fbConf.apiKey) connectFirebase(fbConf);
-  }
-
-  window.showLanding = function() {
-    document.getElementById('landing').style.display = 'flex';
-    document.getElementById('admin-trigger').style.display = 'flex';
-    document.getElementById('admin-panel').style.display = 'none';
-  };
-
-  // ─── TOAST ───
   window.showToast = function(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+    setTimeout(() => t.classList.remove('show'), 3500);
   };
 
-  // ─── INIT ───
-  (function init() {
-    loadNumbersLocal();
-    const metaConf = JSON.parse(localStorage.getItem('meta_config') || 'null');
-    if (metaConf?.pixelId) {
-      window._metaConfig = metaConf;
-      injectPixel(metaConf.pixelId);
-    }
-    // Auto-connect Firebase con credenciales de TrebolMania
-    const defaultConfig = {
-      apiKey: "AIzaSyCuwSu4gWkuPnO5zCdhDnAOX8hwdtUmMOw",
-      authDomain: "trebolmania-2ee95.firebaseapp.com",
-      projectId: "trebolmania-2ee95",
-      storageBucket: "trebolmania-2ee95.firebasestorage.app",
-      messagingSenderId: "1079661627624",
-      appId: "1:1079661627624:web:b891dbc6adf1d58d36a15d"
-    };
-    connectFirebase(defaultConfig);
-  })();
+  init();
 </script>
 </body>
 </html>
