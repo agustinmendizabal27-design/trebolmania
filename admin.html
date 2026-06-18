@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrebolMania — Panel Admin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
+
+  /* LOGIN */
+  #login-screen {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, #1a2a1a 0%, #0a0a0a 70%);
+  }
+  .login-box {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 20px;
+    padding: 40px 32px;
+    width: 90%; max-width: 360px;
+    text-align: center;
+  }
+  .login-logo { font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: #25D366; margin-bottom: 8px; }
+  .login-sub { font-size: 0.82rem; color: #555; margin-bottom: 28px; }
+  .input-group label { display: block; font-size: 0.72rem; color: #888; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; text-align: left; }
+  .input-group input, .input-group select { width: 100%; background: #0f0f0f; border: 1px solid #333; border-radius: 8px; color: #fff; padding: 11px 14px; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+  .input-group input:focus { border-color: #25D366; }
+  .btn-primary { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; border: none; border-radius: 8px; padding: 12px 20px; font-weight: 700; cursor: pointer; font-size: 0.95rem; transition: opacity 0.2s; width: 100%; margin-top: 16px; }
+  .btn-primary:hover { opacity: 0.85; }
+  #login-error { color: #ff4444; font-size: 0.82rem; margin-top: 10px; display: none; }
+
+  /* ADMIN */
+  #admin-screen { display: none; }
+  .admin-wrap { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #1e1e1e; }
+  .admin-title { font-family: 'Oswald', sans-serif; font-size: 1.4rem; color: #25D366; }
+  .btn-secondary { background: #1a1a1a; color: #ccc; border: 1px solid #333; border-radius: 8px; padding: 8px 16px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { background: #2a2a2a; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: #111; border: 1px solid #1e1e1e; border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-value { font-family: 'Oswald', sans-serif; font-size: 2rem; color: #25D366; }
+  .stat-label { font-size: 0.72rem; color: #666; margin-top: 2px; }
+
+  .config-card { background: #111; border: 1px solid #1e1e1e; border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+  .section-title { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+
+  .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  @media(max-width:540px){ .config-grid, .add-form-grid { grid-template-columns: 1fr !important; } }
+
+  .kommo-badge { display: inline-block; background: rgba(255,165,0,0.15); color: orange; border: 1px solid orange; border-radius: 20px; padding: 2px 10px; font-size: 0.68rem; font-weight: 700; margin-left: 8px; }
+
+  .numbers-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; max-height: 340px; overflow-y: auto; }
+  .number-item { display: flex; align-items: center; gap: 10px; background: #161616; border: 1px solid #222; border-radius: 10px; padding: 12px 14px; }
+  .number-item.restricted { border-color: rgba(255,68,68,0.4); opacity: 0.65; }
+  .number-info { flex: 1; }
+  .number-name { font-weight: 600; font-size: 0.9rem; }
+  .number-phone { font-size: 0.78rem; color: #666; }
+  .badge { font-size: 0.65rem; padding: 2px 8px; border-radius: 20px; font-weight: 700; text-transform: uppercase; }
+  .badge-active { background: rgba(37,211,102,0.12); color: #25D366; border: 1px solid #25D366; }
+  .badge-restricted { background: rgba(255,68,68,0.12); color: #ff4444; border: 1px solid #ff4444; }
+  .btn-icon { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 6px; transition: background 0.2s; font-size: 1rem; }
+  .btn-icon:hover { background: #2a2a2a; }
+
+  .add-form { background: #161616; border: 1px solid #222; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .add-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+  .leads-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .leads-table th { background: #161616; padding: 10px 12px; text-align: left; color: #666; font-weight: 600; border-bottom: 1px solid #222; }
+  .leads-table td { padding: 10px 12px; border-bottom: 1px solid #161616; color: #aaa; }
+  .leads-table tr:hover td { background: #161616; }
+
+  .empty-state { text-align: center; padding: 28px; color: #444; font-size: 0.88rem; }
+  .spinner { display: inline-block; width: 15px; height: 15px; border: 2px solid #333; border-top-color: #25D366; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 12px 22px; font-size: 0.88rem; color: #fff; z-index: 9999; transition: transform 0.3s; white-space: nowrap; }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
+  .modal-overlay.active { display: flex; }
+  .modal-box { background: #111; border: 1px solid #2a2a2a; border-radius: 16px; padding: 28px; width: 90%; max-width: 360px; }
+  .modal-title { font-weight: 700; margin-bottom: 16px; font-size: 1rem; }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #0a0a0a; }
+  ::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🍀 TrebolMania</div>
+    <div class="login-sub">Panel de administración</div>
+    <div class="input-group">
+      <label>Contraseña</label>
+      <input type="password" id="pass-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    </div>
+    <div id="login-error">Contraseña incorrecta</div>
+    <button class="btn-primary" onclick="login()">Ingresar</button>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-screen">
+  <div class="admin-wrap">
+
+    <div class="admin-header">
+      <div class="admin-title">⚙️ Panel Admin — TrebolMania</div>
+      <a href="trebolmania.html" class="btn-secondary">← Ver landing</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value" id="stat-total">—</div><div class="stat-label">Números activos</div></div>
+      <div class="stat-card"><div class="stat-value" id="stat-restricted">—</div><div class="stat-label">Restringidos</div></div>
+      <div class="stat-card"><div class="stat-value" id="stat-leads">—</div><div class="stat-label">Leads hoy</div></div>
+    </div>
+
+    <!-- Firebase -->
+    <div class="config-card">
+      <div class="section-title">🔥 Firebase</div>
+      <div class="config-grid">
+        <div class="input-group"><label>API Key</label><input id="fb-apiKey" value="AIzaSyCuwSu4gWkuPnO5zCdhDnAOX8hwdtUmMOw"></div>
+        <div class="input-group"><label>Auth Domain</label><input id="fb-authDomain" value="trebolmania-2ee95.firebaseapp.com"></div>
+        <div class="input-group"><label>Project ID</label><input id="fb-projectId" value="trebolmania-2ee95"></div>
+        <div class="input-group"><label>Storage Bucket</label><input id="fb-storageBucket" value="trebolmania-2ee95.firebasestorage.app"></div>
+        <div class="input-group"><label>Messaging Sender ID</label><input id="fb-messagingSenderId" value="1079661627624"></div>
+        <div class="input-group"><label>App ID</label><input id="fb-appId" value="1:1079661627624:web:b891dbc6adf1d58d36a15d"></div>
+      </div>
+      <button class="btn-primary" onclick="saveFirebaseConfig()">💾 Guardar y conectar</button>
+      <div id="fb-status" style="margin-top:10px;font-size:0.82rem;color:#666"></div>
+    </div>
+
+    <!-- Meta Pixel -->
+    <div class="config-card">
+      <div class="section-title">📊 Píxel Meta + API de Conversiones</div>
+      <div class="config-grid">
+        <div class="input-group"><label>ID del Píxel</label><input id="meta-pixel-id" placeholder="864634119541424"></div>
+        <div class="input-group"><label>Access Token CAPI</label><input id="meta-capi-token" placeholder="EAABxx..."></div>
+      </div>
+      <button class="btn-primary" onclick="saveMetaConfig()">💾 Guardar</button>
+      <div id="meta-status" style="margin-top:10px;font-size:0.82rem;color:#666"></div>
+    </div>
+
+    <!-- Kommo -->
+    <div class="config-card">
+      <div class="section-title">🔗 Kommo CRM <span class="kommo-badge">Próximamente</span></div>
+      <div class="config-grid">
+        <div class="input-group"><label>Subdominio</label><input placeholder="tuempresa.kommo.com" disabled></div>
+        <div class="input-group"><label>Access Token</label><input placeholder="Próximamente" disabled></div>
+      </div>
+      <button class="btn-primary" style="opacity:0.35;cursor:not-allowed" disabled>🔒 Disponible pronto</button>
+    </div>
+
+    <!-- Números -->
+    <div class="config-card">
+      <div class="section-title">📱 Números de WhatsApp</div>
+      <div class="add-form">
+        <div style="font-size:0.8rem;color:#666;margin-bottom:10px;font-weight:600;">➕ AGREGAR NÚMERO</div>
+        <div class="add-form-grid">
+          <div class="input-group"><label>Nombre / Etiqueta</label><input id="new-name" placeholder="Ej: Agente 1"></div>
+          <div class="input-group"><label>Número (con código país)</label><input id="new-phone" placeholder="5491112345678"></div>
+        </div>
+        <div class="input-group" style="margin-bottom:12px">
+          <label>Mensaje predeterminado</label>
+          <input id="new-message" placeholder="Hola! Quiero saber más sobre TrebolMania 🍀">
+        </div>
+        <button class="btn-primary" onclick="addNumber()">Agregar número</button>
+      </div>
+      <div id="numbers-list" class="numbers-list">
+        <div class="empty-state"><span class="spinner"></span> Cargando...</div>
+      </div>
+    </div>
+
+    <!-- Leads -->
+    <div class="config-card">
+      <div class="section-title">📋 Leads recientes</div>
+      <div id="leads-container"><div class="empty-state">Conectá Firebase para ver los leads</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Edit modal -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box">
+    <div class="modal-title">✏️ Editar número</div>
+    <input type="hidden" id="edit-id">
+    <div class="input-group" style="margin-bottom:10px"><label>Nombre</label><input id="edit-name"></div>
+    <div class="input-group" style="margin-bottom:10px"><label>Número</label><input id="edit-phone"></div>
+    <div class="input-group" style="margin-bottom:10px"><label>Mensaje</label><input id="edit-message"></div>
+    <div class="input-group" style="margin-bottom:18px">
+      <label>Estado</label>
+      <select id="edit-status">
+        <option value="active">✅ Activo</option>
+        <option value="restricted">❌ Restringido</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-primary" onclick="saveEdit()">Guardar</button>
+      <button class="btn-secondary" onclick="document.getElementById('edit-modal').classList.remove('active')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const ADMIN_PASSWORD = 'trebol2025';
+  window._fb = { app: null, db: null, connected: false };
+  window._numbers = [];
+
+  // ─── LOGIN ───
+  window.login = function() {
+    const val = document.getElementById('pass-input').value;
+    if (val === ADMIN_PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
+      initAdmin();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  };
+
+  async function initAdmin() {
+    loadMetaFields();
+    const fbConf = {
+      apiKey: "AIzaSyCuwSu4gWkuPnO5zCdhDnAOX8hwdtUmMOw",
+      authDomain: "trebolmania-2ee95.firebaseapp.com",
+      projectId: "trebolmania-2ee95",
+      storageBucket: "trebolmania-2ee95.firebasestorage.app",
+      messagingSenderId: "1079661627624",
+      appId: "1:1079661627624:web:b891dbc6adf1d58d36a15d"
+    };
+    await connectFirebase(fbConf);
+  }
+
+  function loadMetaFields() {
+    try {
+      const conf = JSON.parse(localStorage.getItem('meta_config') || '{}');
+      if (conf.pixelId) document.getElementById('meta-pixel-id').value = conf.pixelId;
+      if (conf.token) document.getElementById('meta-capi-token').value = conf.token;
+    } catch(e) {}
+  }
+
+  // ─── FIREBASE ───
+  window.saveFirebaseConfig = async function() {
+    const config = {
+      apiKey: document.getElementById('fb-apiKey').value.trim(),
+      authDomain: document.getElementById('fb-authDomain').value.trim(),
+      projectId: document.getElementById('fb-projectId').value.trim(),
+      storageBucket: document.getElementById('fb-storageBucket').value.trim(),
+      messagingSenderId: document.getElementById('fb-messagingSenderId').value.trim(),
+      appId: document.getElementById('fb-appId').value.trim(),
+    };
+    await connectFirebase(config);
+  };
+
+  async function connectFirebase(config) {
+    const status = document.getElementById('fb-status');
+    status.innerHTML = '<span class="spinner"></span> Conectando...';
+    try {
+      if (!window._fb.app) window._fb.app = initializeApp(config);
+      window._fb.db = getFirestore(window._fb.app);
+      window._fb.connected = true;
+      status.innerHTML = '✅ Conectado';
+      status.style.color = '#25D366';
+      showToast('✅ Firebase conectado');
+      await loadNumbers();
+      await loadLeads();
+    } catch(e) {
+      status.innerHTML = '❌ Error: ' + e.message;
+      status.style.color = '#ff4444';
+      loadNumbersLocal();
+    }
+  }
+
+  // ─── META ───
+  window.saveMetaConfig = function() {
+    const conf = { pixelId: document.getElementById('meta-pixel-id').value.trim(), token: document.getElementById('meta-capi-token').value.trim() };
+    if (!conf.pixelId) { showToast('⚠️ Ingresá el ID del Píxel'); return; }
+    localStorage.setItem('meta_config', JSON.stringify(conf));
+    document.getElementById('meta-status').innerHTML = '✅ Guardado: ' + conf.pixelId;
+    document.getElementById('meta-status').style.color = '#25D366';
+    showToast('✅ Configuración Meta guardada');
+  };
+
+  // ─── NUMBERS ───
+  async function loadNumbers() {
+    if (!window._fb.connected) { loadNumbersLocal(); return; }
+    try {
+      const snap = await getDocs(collection(window._fb.db, 'whatsapp_numbers'));
+      window._numbers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      saveNumbersLocal();
+    } catch(e) { loadNumbersLocal(); }
+    renderNumbers(); updateStats();
+  }
+
+  function loadNumbersLocal() {
+    try { window._numbers = JSON.parse(localStorage.getItem('wsp_numbers') || '[]'); } catch(e) { window._numbers = []; }
+    renderNumbers(); updateStats();
+  }
+
+  function saveNumbersLocal() { localStorage.setItem('wsp_numbers', JSON.stringify(window._numbers)); }
+
+  window.addNumber = async function() {
+    const name = document.getElementById('new-name').value.trim();
+    const phone = document.getElementById('new-phone').value.trim().replace(/\D/g,'');
+    const message = document.getElementById('new-message').value.trim() || 'Hola! Quiero saber más sobre TrebolMania 🍀';
+    if (!name || !phone) { showToast('⚠️ Completá nombre y número'); return; }
+    const num = { name, phone, message, status: 'active', createdAt: Date.now() };
+    if (window._fb.connected) {
+      try { const ref = await addDoc(collection(window._fb.db, 'whatsapp_numbers'), num); num.id = ref.id; }
+      catch(e) { num.id = 'local_' + Date.now(); }
+    } else { num.id = 'local_' + Date.now(); }
+    window._numbers.push(num);
+    saveNumbersLocal();
+    document.getElementById('new-name').value = '';
+    document.getElementById('new-phone').value = '';
+    document.getElementById('new-message').value = '';
+    renderNumbers(); updateStats();
+    showToast('✅ Número agregado');
+  };
+
+  window.openEditModal = function(id) {
+    const n = window._numbers.find(x => x.id === id); if (!n) return;
+    document.getElementById('edit-id').value = id;
+    document.getElementById('edit-name').value = n.name;
+    document.getElementById('edit-phone').value = n.phone;
+    document.getElementById('edit-message').value = n.message || '';
+    document.getElementById('edit-status').value = n.status || 'active';
+    document.getElementById('edit-modal').classList.add('active');
+  };
+
+  window.saveEdit = async function() {
+    const id = document.getElementById('edit-id').value;
+    const updates = { name: document.getElementById('edit-name').value.trim(), phone: document.getElementById('edit-phone').value.trim().replace(/\D/g,''), message: document.getElementById('edit-message').value.trim(), status: document.getElementById('edit-status').value };
+    if (!updates.name || !updates.phone) { showToast('⚠️ Completá los campos'); return; }
+    const idx = window._numbers.findIndex(n => n.id === id);
+    window._numbers[idx] = { ...window._numbers[idx], ...updates };
+    if (window._fb.connected && !id.startsWith('local_')) {
+      try { await updateDoc(doc(window._fb.db, 'whatsapp_numbers', id), updates); } catch(e) {}
+    }
+    saveNumbersLocal(); renderNumbers(); updateStats();
+    document.getElementById('edit-modal').classList.remove('active');
+    showToast('✅ Número actualizado');
+  };
+
+  window.deleteNumber = async function(id) {
+    if (!confirm('¿Eliminar este número?')) return;
+    window._numbers = window._numbers.filter(n => n.id !== id);
+    if (window._fb.connected && !id.startsWith('local_')) {
+      try { await deleteDoc(doc(window._fb.db, 'whatsapp_numbers', id)); } catch(e) {}
+    }
+    saveNumbersLocal(); renderNumbers(); updateStats();
+    showToast('🗑️ Número eliminado');
+  };
+
+  function renderNumbers() {
+    const list = document.getElementById('numbers-list');
+    if (!window._numbers.length) { list.innerHTML = '<div class="empty-state">No hay números. Agregá el primero ↑</div>'; return; }
+    list.innerHTML = window._numbers.map(n => `
+      <div class="number-item ${n.status==='restricted'?'restricted':''}">
+        <div class="number-info">
+          <div class="number-name">${n.name}</div>
+          <div class="number-phone">+${n.phone}</div>
+        </div>
+        <span class="badge ${n.status==='restricted'?'badge-restricted':'badge-active'}">${n.status==='restricted'?'Restringido':'Activo'}</span>
+        <button class="btn-icon" onclick="openEditModal('${n.id}')">✏️</button>
+        <button class="btn-icon" onclick="deleteNumber('${n.id}')">🗑️</button>
+      </div>`).join('');
+  }
+
+  function updateStats() {
+    document.getElementById('stat-total').textContent = window._numbers.filter(n=>n.status!=='restricted').length;
+    document.getElementById('stat-restricted').textContent = window._numbers.filter(n=>n.status==='restricted').length;
+  }
+
+  // ─── LEADS ───
+  async function loadLeads() {
+    if (!window._fb.connected) return;
+    try {
+      const snap = await getDocs(query(collection(window._fb.db, 'leads'), orderBy('timestamp','desc'), limit(50)));
+      const leads = snap.docs.map(d => d.data());
+      const today = new Date(); today.setHours(0,0,0,0);
+      document.getElementById('stat-leads').textContent = leads.filter(l => l.timestamp > today.getTime()).length;
+      renderLeads(leads);
+    } catch(e) { document.getElementById('stat-leads').textContent = '0'; }
+  }
+
+  function renderLeads(leads) {
+    const c = document.getElementById('leads-container');
+    if (!leads.length) { c.innerHTML = '<div class="empty-state">Aún no hay leads registrados</div>'; return; }
+    c.innerHTML = `<table class="leads-table"><thead><tr><th>Fecha</th><th>Agente</th><th>Número</th></tr></thead><tbody>
+      ${leads.slice(0,30).map(l=>`<tr>
+        <td>${new Date(l.timestamp).toLocaleString('es-AR')}</td>
+        <td>${l.agentName||'—'}</td>
+        <td>+${l.phone||'—'}</td>
+      </tr>`).join('')}
+    </tbody></table>`;
+  }
+
+  // ─── TOAST ───
+  window.showToast = function(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  };
+</script>
+</body>
+</html>
