@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TrebolMania - Probá tu Suerte</title>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1030280699440888');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1030280699440888&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -136,12 +153,13 @@
     appId: "1:1079661627624:web:b891dbc6adf1d58d36a15d"
   };
 
+  // URL de la función serverless en Vercel (API de Conversiones)
+  const CAPI_ENDPOINT = "https://trebolmania-conversions.vercel.app/api/conversions";
+
   window._fb = { app: null, db: null, connected: false };
   window._numbers = [];
   window._currentIndex = 0;
-  window._metaConfig = JSON.parse(localStorage.getItem('meta_config') || '{}');
 
-  // Conectar Firebase
   async function init() {
     try {
       window._fb.app = initializeApp(FIREBASE_CONFIG);
@@ -149,9 +167,6 @@
       window._fb.connected = true;
       await refreshNumbers();
     } catch(e) { console.warn('Firebase error:', e); }
-
-    // Inyectar píxel si está configurado
-    if (window._metaConfig?.pixelId) injectPixel(window._metaConfig.pixelId);
   }
 
   async function refreshNumbers() {
@@ -162,21 +177,17 @@
     } catch(e) {}
   }
 
-  function injectPixel(pixelId) {
-    if (!pixelId || document.getElementById('fb-pixel-script')) return;
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.id='fb-pixel-script';t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', pixelId);
-    fbq('track', 'PageView');
-  }
-
   async function sendCAPIEvent(eventName) {
-    const conf = window._metaConfig;
-    if (!conf?.pixelId || !conf?.token) return;
     try {
-      await fetch(`https://graph.facebook.com/v19.0/${conf.pixelId}/events?access_token=${conf.token}`, {
+      await fetch(CAPI_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: [{ event_name: eventName, event_time: Math.floor(Date.now()/1000), action_source: 'website', event_source_url: window.location.href, user_data: { client_user_agent: navigator.userAgent } }] })
+        body: JSON.stringify({
+          event_name: eventName,
+          client_user_agent: navigator.userAgent,
+          fbp: document.cookie.match(/_fbp=([^;]+)/)?.[1] || '',
+          fbc: document.cookie.match(/_fbc=([^;]+)/)?.[1] || ''
+        })
       });
     } catch(e) {}
   }
@@ -189,7 +200,6 @@
     btn.style.pointerEvents = 'none';
 
     try {
-      // Refrescar desde Firebase en tiempo real
       await refreshNumbers();
 
       const actives = window._numbers.filter(n => n.status !== 'restricted');
@@ -202,7 +212,6 @@
       const chosen = actives[window._currentIndex++];
       const msg = encodeURIComponent(chosen.message || 'Hola! Quiero saber más sobre TrebolMania 🍀');
 
-      // Guardar lead
       if (window._fb.connected) {
         try {
           await addDoc(collection(window._fb.db, 'leads'), {
@@ -214,7 +223,6 @@
         } catch(e) {}
       }
 
-      // Píxel + CAPI
       if (typeof fbq !== 'undefined') fbq('track', 'Lead');
       await sendCAPIEvent('Lead');
 
